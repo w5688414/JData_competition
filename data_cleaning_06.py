@@ -208,12 +208,22 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
         dim_user = get_user_by_dim(age, lv)
         X = []
         Y = []
-        for id, u in enumerate(dim_user.values):
-            dump_path_x_cache = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (step_size, age, lv, id)
-            dump_path_y_cache = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (step_size, age, lv, id)
+        b = 0
+        # 加载缓存
+        for cache_id in range(1000):
+            dump_path_x_cache = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
+                step_size, age, lv, (cache_id + 1) * 100)
+            dump_path_y_cache = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
+                step_size, age, lv, (cache_id + 1) * 100)
             if is_exist(dump_path_x_cache) & is_exist(dump_path_y_cache):
                 X = load_data(dump_path_x_cache)
                 Y = load_data(dump_path_y_cache)
+                b = b + 1
+            else:
+                break
+
+        for id, u in enumerate(dim_user.values):
+            if id < b * 100:
                 print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
                 continue
             else:
@@ -314,11 +324,12 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                     else:
                         buy_rate = y_o_num / x_action_num
                     Y.append(buy_rate)
-                    dump_data(X, dump_path_x_cache)
-                    dump_data(Y, dump_path_y_cache)
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
-        dump_data(X, dump_path_x)
-        dump_data(Y, dump_path_y)
+            if (id + 1) % 100 == 0:
+                dump_data(X, dump_path_x_cache)
+                dump_data(Y, dump_path_y_cache)
+    dump_data(X, dump_path_x)
+    dump_data(Y, dump_path_y)
     return X, Y
 
 
