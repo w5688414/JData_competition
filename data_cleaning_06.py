@@ -223,6 +223,10 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                 break
 
         for id, u in enumerate(dim_user.values):
+            dump_path_x_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
+                step_size, age, lv, (id + 1) * 100)
+            dump_path_y_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
+                step_size, age, lv, (id + 1) * 100)
             if id < b * 100:
                 print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
                 continue
@@ -326,8 +330,8 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                     Y.append(buy_rate)
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
             if (id + 1) % 100 == 0:
-                dump_data(X, dump_path_x_cache)
-                dump_data(Y, dump_path_y_cache)
+                dump_data(X, dump_path_x_cache_1)
+                dump_data(Y, dump_path_y_cache_1)
     dump_data(X, dump_path_x)
     dump_data(Y, dump_path_y)
     return X, Y
