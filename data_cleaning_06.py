@@ -224,9 +224,9 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
 
         for id, u in enumerate(dim_user.values):
             dump_path_x_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
-                step_size, age, lv, (id + 1) * 100)
+                step_size, age, lv, id + 1)
             dump_path_y_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
-                step_size, age, lv, (id + 1) * 100)
+                step_size, age, lv, id + 1)
             if id < b * 100:
                 print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
                 continue
