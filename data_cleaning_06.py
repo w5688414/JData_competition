@@ -214,6 +214,8 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
             if is_exist(dump_path_x_cache) & is_exist(dump_path_y_cache):
                 X = load_data(dump_path_x_cache)
                 Y = load_data(dump_path_y_cache)
+                print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
+                continue
             else:
                 # 用户U所有的行为和订单
                 user_order_action = get_usr_order_action(u[0])
@@ -312,9 +314,8 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                     else:
                         buy_rate = y_o_num / x_action_num
                     Y.append(buy_rate)
-                    if id % 100 == 0:
-                        dump_data(X, dump_path_x_cache)
-                        dump_data(Y, dump_path_y_cache)
+                    dump_data(X, dump_path_x_cache)
+                    dump_data(Y, dump_path_y_cache)
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
         dump_data(X, dump_path_x)
         dump_data(Y, dump_path_y)
