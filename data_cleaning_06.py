@@ -319,7 +319,7 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
         dump_data(X, dump_path_x)
         dump_data(Y, dump_path_y)
-        return X, Y
+    return X, Y
 
 
 def get_handle_order_06():
