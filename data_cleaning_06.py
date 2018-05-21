@@ -253,8 +253,9 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                     user_action_o = user_action_o[user_action_o['sku_id'] == o_sku]
                     # 遍历前七天，生成数据，为空填充0
                     x = []
-                    c = o.copy()
+
                     for i in range(step_size):
+                        c = np.array(o)
                         day = datetime.strptime(o_days, '%Y-%m-%d') + timedelta(days=i + 1)
                         day = day.strftime('%Y-%m-%d')
                         # 行为当天
@@ -319,7 +320,7 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                             c[24] = day_action[0][24]
                             c[25] = day_action[0][25]
                             x.append(c)
-                        X.append(x)
+                    X.append(x)
                     x_c = x.copy()
                     x_c = pd.DataFrame(x_c)
                     x_c = x_c.groupby(by=0, as_index=False).sum()
