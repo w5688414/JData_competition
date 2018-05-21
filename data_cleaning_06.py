@@ -210,15 +210,16 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
         Y = []
         b = 0
         # 加载缓存
-        for cache_id in range(1000):
+        for cache_id in range(100):
             dump_path_x_cache = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
-                step_size, age, lv, (cache_id + 1) * 100)
+                step_size, age, lv, (cache_id + 1) * 1000)
             dump_path_y_cache = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
-                step_size, age, lv, (cache_id + 1) * 100)
+                step_size, age, lv, (cache_id + 1) * 1000)
             if is_exist(dump_path_x_cache) & is_exist(dump_path_y_cache):
                 X = load_data(dump_path_x_cache)
                 Y = load_data(dump_path_y_cache)
                 b = b + 1
+                print(b)
             else:
                 break
 
@@ -227,7 +228,7 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                 step_size, age, lv, id + 1)
             dump_path_y_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
                 step_size, age, lv, id + 1)
-            if id < b * 100:
+            if id < b * 1000:
                 print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
                 continue
             else:
@@ -252,13 +253,14 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                     user_action_o = user_action_o[user_action_o['sku_id'] == o_sku]
                     # 遍历前七天，生成数据，为空填充0
                     x = []
+                    c = o.copy()
                     for i in range(step_size):
                         day = datetime.strptime(o_days, '%Y-%m-%d') + timedelta(days=i + 1)
                         day = day.strftime('%Y-%m-%d')
                         # 行为当天
                         day_action = user_action_o[user_action_o['date'] == day]
                         # 如果行为不为空
-                        c = o.copy()
+
                         o = np.array(o)
                         if day_action.empty:
                             c[0] = o[0]
@@ -329,7 +331,7 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                         buy_rate = y_o_num / x_action_num
                     Y.append(buy_rate)
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
-            if (id + 1) % 100 == 0:
+            if (id + 1) % 1000 == 0:
                 dump_data(X, dump_path_x_cache_1)
                 dump_data(Y, dump_path_y_cache_1)
     dump_data(X, dump_path_x)
