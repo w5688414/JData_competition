@@ -41,7 +41,7 @@ def load_data(dump_path):
     :param dump_path:
     :return:
     '''
-    return pickle.load(open(dump_path, 'rb'))
+    return pd.read_csv(dump_path)
 
 
 def dump_data(obj, dump_path):
@@ -51,7 +51,7 @@ def dump_data(obj, dump_path):
     :param dump_path:
     :return:
     '''
-    pickle.dump(obj, open(dump_path, 'wb+'))
+    obj.to_csv(dump_path)
 
 
 def is_exist(dump_path):
@@ -78,7 +78,7 @@ def get_all_sku_06():
     获取所有商品信息
     :return:
     '''
-    dump_path = './cache/get_all_sku_06.pkl'
+    dump_path = './cache/get_all_sku_06.csv'
     if is_exist(dump_path):
         sku = load_data(dump_path)
     else:
@@ -97,7 +97,7 @@ def get_all_user_06():
     获取所有用户信息
     :return:
     '''
-    dump_path = './cache/get_all_user_06.pkl'
+    dump_path = './cache/get_all_user_06.csv'
     if is_exist(dump_path):
         user = load_data(dump_path)
     else:
@@ -111,7 +111,7 @@ def get_all_order_06():
     获取所有订单信息
     :return:
     '''
-    dump_path = './cache/get_all_order_06.pkl'
+    dump_path = './cache/get_all_order_06.csv'
     if is_exist(dump_path):
         order = load_data(dump_path)
     else:
@@ -137,7 +137,7 @@ def get_all_action_06():
    将下单行为追加到行为表中,获取全部行为信息
    :return:
    '''
-    dump_path = './cache/get_all_action_06.pkl'
+    dump_path = './cache/get_all_action_06.csv'
     if is_exist(dump_path):
         actions = load_data(dump_path)
     else:
@@ -162,7 +162,7 @@ def get_order_by_cate_age_sex():
 
 
 def get_all_action_order_06():
-    dump_path = './cache/get_all_action_order_06.pkl'
+    dump_path = './cache/get_all_action_order_06.csv'
     if is_exist(dump_path):
         action_order = load_data(dump_path)
     else:
@@ -197,8 +197,8 @@ def get_usr_order_action(user_id):
 
 
 def get_train_test_set_06(step_size=7, age=-9, lv=-9):
-    dump_path_x = './cache/get_train_test_set_06_%s_%s_%s_X.pkl' % (step_size, age, lv)
-    dump_path_y = './cache/get_train_test_set_06_%s_%s_%s_Y.pkl' % (step_size, age, lv)
+    dump_path_x = './cache/get_train_test_set_06_%s_%s_%s_X.csv' % (step_size, age, lv)
+    dump_path_y = './cache/get_train_test_set_06_%s_%s_%s_Y.csv' % (step_size, age, lv)
 
     # 通过维度筛选出的用户
     if is_exist(dump_path_x) & is_exist(dump_path_y):
@@ -211,9 +211,9 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
         b = 0
         # 加载缓存
         for cache_id in range(100):
-            dump_path_x_cache = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
+            dump_path_x_cache = './cache/get_train_test_set_06_%s_%s_%s_X_%s.csv' % (
                 step_size, age, lv, (cache_id + 1) * 1000)
-            dump_path_y_cache = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
+            dump_path_y_cache = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.csv' % (
                 step_size, age, lv, (cache_id + 1) * 1000)
             if is_exist(dump_path_x_cache) & is_exist(dump_path_y_cache):
                 X = load_data(dump_path_x_cache)
@@ -224,9 +224,9 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                 break
 
         for id, u in enumerate(dim_user.values):
-            dump_path_x_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_X_%s.pkl' % (
+            dump_path_x_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_X_%s.csv' % (
                 step_size, age, lv, id + 1)
-            dump_path_y_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.pkl' % (
+            dump_path_y_cache_1 = './cache/get_train_test_set_06_%s_%s_%s_Y_%s.csv' % (
                 step_size, age, lv, id + 1)
             if id < b * 1000:
                 print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
@@ -240,10 +240,11 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                 # 用户所有行为中的点击和关注行为
                 # 注：只要的点击行为，没有要关注行为
                 user_action = user_order_action[user_order_action['a_type'] == 1]
-
+                
+                # print(user_order.values)
                 for j, o in enumerate(user_order.values):
                     # 下单时间
-                    o_date = o[1]
+                    o_date = o[2]
                     # 产品sku
                     o_sku = o[3]
                     o_days = datetime.strptime(o_date, '%Y-%m-%d') - timedelta(days=step_size)

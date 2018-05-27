@@ -7,8 +7,8 @@ from data_cleaning_06 import *
 import numpy as np
 from keras.callbacks import ModelCheckpoint 
 
-data_X=load_data("./cache/get_train_test_set_06_7_-9_-9_X_2000.pkl")
-data_Y=load_data("./cache/get_train_test_set_06_7_-9_-9_Y_2000.pkl")
+data_X=load_data("./cache/get_train_test_set_06_7_-9_-9_X_61000.pkl")
+data_Y=load_data("./cache/get_train_test_set_06_7_-9_-9_Y_61000.pkl")
 
 # print(data_X)
 data_X=np.array(data_X)
