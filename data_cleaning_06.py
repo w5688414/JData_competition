@@ -242,6 +242,7 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                 user_action = user_order_action[user_order_action['a_type'] == 1]
                 
                 # print(user_order.values)
+                print(user_order.keys)
                 for j, o in enumerate(user_order.values):
                     # 下单时间
                     o_date = o[2]
@@ -333,7 +334,8 @@ def get_train_test_set_06(step_size=7, age=-9, lv=-9):
                         buy_rate = y_o_num / x_action_num
                     Y.append(buy_rate)
             print('id ：%s' % (id + 1), 'X ：%s' % (len(X)), 'Y ：%s' % (len(Y)))
-            if (id + 1) % 1000 == 0:
+            if (id + 1) % 2 == 0:
+                print(X)
                 dump_data(X, dump_path_x_cache_1)
                 dump_data(Y, dump_path_y_cache_1)
     dump_data(X, dump_path_x)
