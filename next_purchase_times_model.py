@@ -4,9 +4,9 @@ from keras.models import Sequential
 from keras.layers import Dense,Dropout
 from keras.layers import LSTM
 import numpy as np
-from keras.callbacks import ModelCheckpoint 
+from keras.callbacks import ModelCheckpoint
+from keras.callbacks import TensorBoard 
 from util import DataLoader, Features
-from SBBTree_ONLINE import SBBTree
 import pandas as pd 
 import numpy as np 
 from datetime import datetime, timedelta
@@ -56,16 +56,25 @@ scaler_x = MinMaxScaler ( feature_range =( 0, 1))
 x = scaler_x.fit_transform (X)
 x=x.reshape(x.shape[0], 1, x.shape[1])
 
-model = Sequential ()
-model.add (LSTM (30 , activation = 'tanh', inner_activation = 'hard_sigmoid' , input_shape =(1, x.shape[2]) ))
-model.add(Dropout(0.3))
-model.add(Dense(64,activation='tanh'))
-model.add (Dense(1, activation = 'linear'))
+def lstm_model():
+	model = Sequential ()
+	model.add (LSTM (256 , activation = 'tanh', inner_activation = 'hard_sigmoid' , input_shape =(1, x.shape[2]) ))
+	# model.add(Dropout(0.2))
+	model.add(Dropout(0.3))
+	model.add (Dense(1, activation = 'linear'))
+	
+	return model
+
+model=lstm_model()
 print(model.summary())
-epochs = 100
-checkpointer = ModelCheckpoint(filepath='weights.purchase_times.hdf5', verbose=1, save_best_only=True)
+epochs = 50
+model_names = ('./trained_models/' +
+               'purchase_times.{epoch:02d}-{val_loss:.4f}.hdf5')
+checkpointer = ModelCheckpoint(filepath=model_names, verbose=1, save_best_only=True)
+tensorboard_logs =TensorBoard(log_dir='./keras_logs', write_graph=True)
+checkpointer = ModelCheckpoint(filepath=model_names, verbose=1, save_best_only=True)
 print('Start training...')
 
 model.compile (loss ="mean_absolute_error" , optimizer = "rmsprop")   
-model.fit (x, y, batch_size =16, nb_epoch =epochs, validation_split=0.3,callbacks=[checkpointer],shuffle = False)
+model.fit (x, y, batch_size =16, nb_epoch =epochs, validation_split=0.3,callbacks=[checkpointer,tensorboard_logs],shuffle = False)
 # model.save('my_model.h5')   

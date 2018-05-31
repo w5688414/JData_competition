@@ -12,11 +12,11 @@ from util import DataLoader, Features
 
 # test code
 Data = DataLoader(
-				FILE_jdata_sku_basic_info='../data/jdata_sku_basic_info.csv',
-				FILE_jdata_user_action='../data/jdata_user_action.csv',
-				FILE_jdata_user_basic_info='../data/jdata_user_basic_info.csv',
-				FILE_jdata_user_comment_score='../data/jdata_user_comment_score.csv',
-				FILE_jdata_user_order='../data/jdata_user_order.csv'
+				FILE_jdata_sku_basic_info='./data_ori/jdata_sku_basic_info.csv',
+				FILE_jdata_user_action='./data_ori/jdata_user_action.csv',
+				FILE_jdata_user_basic_info='./data_ori/jdata_user_basic_info.csv',
+				FILE_jdata_user_comment_score='./data_ori/jdata_user_comment_score.csv',
+				FILE_jdata_user_order='./data_ori/jdata_user_order.csv'
 			)
 
 # train data
@@ -50,14 +50,14 @@ x=x.reshape(x.shape[0], 1, x.shape[1])
 
 # train 下个月购买次数预测 回归模型
 
-model = load_model("./weights.purchase_times.hdf5")
+model = load_model("./trained_models/purchase_times.44-0.3226.hdf5")
 model.compile (loss ="mean_absolute_error" , optimizer = "rmsprop") 
 train_label_BuyNum = 'Label_30_101_BuyNum'
 PredFeatures.data_BuyOrNot_FirstTime[train_label_BuyNum] = model.predict(x)
 # pred=model.predict(x)
 
 # train 当月首次购买时间预测 回归模型
-model = load_model("./weights.purchase_date.hdf5")
+model = load_model("./trained_models/purchase_date.49-6.3767.hdf5")
 model.compile (loss ="mean_absolute_error" , optimizer = "rmsprop") 
 train_label_FirstTime = 'Label_30_101_FirstTime'
 PredFeatures.data_BuyOrNot_FirstTime[train_label_FirstTime] = model.predict(x)
