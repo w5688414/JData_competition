@@ -10,6 +10,7 @@
 
 ## train
 python next_purchase_date_model.py
+
 python next_purchase_times_model.py
 
 ## predict
